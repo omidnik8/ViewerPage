@@ -1,0 +1,53 @@
+<script>
+  async function loadModels() {
+    const token = 'YOUR_TOKEN_HERE'; // ← Replace with your token
+    const repo = 'YOUR_USERNAME/YOUR_REPO'; // ← Replace with your repo (e.g., 'myusername/myarproject')
+    
+    try {
+      const response = await fetch(
+        `https://api.github.com/repos/${repo}/contents/viewables`, 
+        {
+          headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        }
+      );
+      
+      if (!response.ok) throw new Error('Failed to fetch models');
+      
+      const files = await response.json();
+      const glbFiles = files.filter(file => file.name.endsWith('.glb'));
+      
+      return glbFiles.map(file => ({
+        name: file.name.replace('.glb', ''),
+        file: file.download_url // GitHub provides direct download links
+      }));
+      
+    } catch (error) {
+      console.error("Error loading models:", error);
+      return [];
+    }
+  }
+
+  // Usage (same as before):
+  loadModels().then(models => {
+    const gallery = document.getElementById('model-gallery');
+    gallery.innerHTML = models.length ? '' : '<p>No models found.</p>';
+    
+    models.forEach(model => {
+      gallery.innerHTML += `
+        <div class="model-container">
+          <div class="model-title">${model.name}</div>
+          <model-viewer
+            src="${model.file}"
+            ar
+            camera-controls
+            auto-rotate
+            alt="${model.name}">
+          </model-viewer>
+        </div>
+      `;
+    });
+  });
+</script>
