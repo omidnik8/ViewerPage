@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Markerless AR Web Page</title>
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My AR Web Page</title>
+    <!-- Load model-viewer script -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
-  <div id="fallback">Loading A-Frame... If you see this, A-Frame may not be working.</div>
-  <a-scene embedded>
-    <a-box position="0 0 -2" scale="0.5 0.5 0.5" color="red" rotation="0 45 0"></a-box>
-    <a-text value="Hello, AR World!" color="white" position="0 1 -2" align="center"></a-text>
-    <a-entity camera position="0 1.6 0"></a-entity>
-  </a-scene>
+    <h1>My AR Experience</h1>
+    <p>Open this page on your iPhone/tablet and tap the AR button!</p>
+
+    <!-- 3D Model with AR -->
+    <model-viewer 
+        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+        ar 
+        ar-modes="scene-viewer quick-look" 
+        camera-controls 
+        alt="A 3D model of an astronaut">
+    </model-viewer>
 </body>
 </html>
