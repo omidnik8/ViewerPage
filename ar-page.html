@@ -7,23 +7,9 @@
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 </head>
 <body>
-  <a-scene
-    webxr="requiredFeatures: hit-test, local-floor;"
-    vr-mode-ui="enabled: false"
-    renderer="colorManagement: true"
-    embedded>
-    <a-box
-      position="0 0 -2"
-      scale="0.5 0.5 0.5"
-      color="red"
-      animation="property: rotation; to: 0 360 0; loop: true; dur: 5000">
-    </a-box>
-    <a-text
-      value="Hello, AR World!"
-      color="white"
-      position="0 1 -2"
-      align="center">
-    </a-text>
+  <a-scene embedded>
+    <a-box position="0 0 -2" scale="0.5 0.5 0.5" color="red" rotation="0 45 0"></a-box>
+    <a-text value="Hello, AR World!" color="white" position="0 1 -2" align="center"></a-text>
     <a-entity camera position="0 1.6 0"></a-entity>
   </a-scene>
 </body>
