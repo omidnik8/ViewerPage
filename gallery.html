@@ -3,31 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Gallery (Fixed)</title>
-    <!-- Load Model Viewer PROPERLY -->
+    <title>AR Gallery (Working)</title>
+    
+    <!-- 1. PROPER Model Viewer Load -->
     <script type="module" src="https://unpkg.com/@google/model-viewer@^2.1.1/dist/model-viewer.min.js"></script>
+    <script nomodule src="https://unpkg.com/@google/model-viewer@^2.1.1/dist/model-viewer-legacy.js"></script>
+    
     <style>
-        /* === FIXED STYLES === */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f5f5f5;
-        }
+        /* 2. CRITICAL CSS FIXES */
         model-viewer {
             width: 100%;
             height: 400px;
-            background: #eee;
+            background: #f0f0f0;
             margin: 20px 0;
-            --poster-color: transparent;
+            --progress-bar-color: #1a73e8;
         }
-        .ar-button {
+        .model-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            background: white;
+        }
+        /* 3. AR BUTTON FIX */
+        button[slot="ar-button"] {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background: #1a73e8;
             color: white;
-            border: none;
             padding: 12px 24px;
+            border: none;
             border-radius: 4px;
-            margin: 10px 0;
             cursor: pointer;
         }
     </style>
@@ -37,44 +45,36 @@
     <div id="model-gallery"></div>
 
     <script>
-        // ==================== CONFIG ====================
-        const modelFiles = [
-            { name: "Cabin 1", file: "viewables/Cabin_1.glb" },
-            { name: "Cabin 2", file: "viewables/Cabin_2.glb" }
-        ];
-        // ===============================================
-
-        function initGallery() {
+        // 4. SAFE MODEL LOADING
+        document.addEventListener('DOMContentLoaded', () => {
+            const models = [
+                { name: "Cabin 1", file: "viewables/Cabin_1.glb" },
+                { name: "Cabin 2", file: "viewables/Cabin_2.glb" }
+            ];
+            
             const gallery = document.getElementById('model-gallery');
             
-            if (!modelFiles.length) {
-                gallery.innerHTML = "<p>No models found</p>";
-                return;
-            }
-
-            modelFiles.forEach(model => {
+            models.forEach(model => {
                 const container = document.createElement('div');
+                container.className = 'model-container';
                 container.innerHTML = `
                     <h3>${model.name}</h3>
                     <model-viewer
                         src="${model.file}"
                         ar
-                        ar-modes="scene-viewer quick-look webxr"
+                        ar-modes="webxr scene-viewer quick-look"
                         camera-controls
                         auto-rotate
                         environment-image="neutral"
                         alt="${model.name}">
-                        <button slot="ar-button" class="ar-button">
+                        <button slot="ar-button">
                             👆 View in AR
                         </button>
                     </model-viewer>
                 `;
                 gallery.appendChild(container);
             });
-        }
-
-        // Initialize when DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', initGallery);
+        });
     </script>
 </body>
 </html>
