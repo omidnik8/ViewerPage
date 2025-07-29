@@ -6,7 +6,7 @@
     <title>3D Model Gallery</title>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-        /* General Body Styles */
+        /* (Your CSS here... no changes needed) */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -20,16 +20,12 @@
         h1, .instructions {
             text-align: center;
         }
-
-        /* Grid Layout */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             padding: 20px;
         }
-
-        /* Individual model cards */
         .model-card {
             background: white;
             border-radius: 8px;
@@ -39,20 +35,16 @@
             overflow: hidden;
             transition: transform 0.5s ease-in-out, z-index 0.5s ease-in-out, opacity 0.5s ease-in-out;
         }
-        
         .model-card h2 {
             text-align: center;
             padding: 15px 0 0;
             margin: 0;
             font-size: 1.2em;
         }
-
         model-viewer {
             width: 100%;
             height: 250px;
         }
-        
-        /* Expanded state for the card */
         .model-card.expanded {
             position: fixed;
             top: 50%;
@@ -63,12 +55,9 @@
             z-index: 1000;
             cursor: default;
         }
-
         .model-card.expanded model-viewer {
             height: 90%;
         }
-
-        /* Background overlay */
         #gallery-overlay {
             position: fixed;
             top: 0;
@@ -83,10 +72,8 @@
         }
         #gallery-overlay.active {
             opacity: 1;
-            pointer-events: auto; /* Allow clicks on the overlay to close */
+            pointer-events: auto;
         }
-
-        /* 1. STYLING FOR THE CLOSE BUTTON */
         .close-btn {
             position: absolute;
             top: 15px;
@@ -101,15 +88,12 @@
             line-height: 38px;
             text-align: center;
             cursor: pointer;
-            z-index: 1001; /* Above the model viewer */
-            display: none; /* Hidden by default */
+            z-index: 1001;
+            display: none;
         }
-        
         .model-card.expanded .close-btn {
-            display: block; /* Show only when card is expanded */
+            display: block;
         }
-        
-        /* 2. STYLING FOR THE AR BUTTON */
         .ar-button {
             background: #1a73e8;
             color: white;
@@ -131,6 +115,10 @@
         <h1>3D Model Gallery</h1>
         <p class="instructions">Click on a model to view it in detail. Use the AR button on a mobile device to see it in your world.</p>
         
+        <!-- ====================================================== -->
+        <!-- ============== START OF MODEL GALLERY ================ -->
+        <!-- ====================================================== -->
+        
         <div class="gallery-grid">
             <!-- Model 1 -->
             <div class="model-card">
@@ -142,8 +130,8 @@
                     auto-rotate
                     environment-image="neutral"
                     alt="Forest Cabin 3D model"
-                    ar /* Enable AR */
-                    ar-modes="scene-viewer quick-look" /* Define AR modes */>
+                    ar
+                    ar-modes="scene-viewer quick-look">
                     <button slot="ar-button" class="ar-button">
                         View in AR
                     </button>
@@ -160,15 +148,15 @@
                     auto-rotate
                     environment-image="neutral"
                     alt="Mountain Cabin 3D model"
-                    ar /* Enable AR */
-                    ar-modes="scene-viewer quick-look" /* Define AR modes */>
+                    ar
+                    ar-modes="scene-viewer quick-look">
                     <button slot="ar-button" class="ar-button">
                         View in AR
                     </button>
                 </model-viewer>
             </div>
 
-                      <!-- Model 3 -->
+            <!-- Model 3 -->
             <div class="model-card">
                 <button class="close-btn">×</button>
                 <h2>Mountain Cabin 2</h2>
@@ -178,19 +166,25 @@
                     auto-rotate
                     environment-image="neutral"
                     alt="Mountain Cabin 3D model"
-                    ar /* Enable AR */
-                    ar-modes="scene-viewer quick-look" /* Define AR modes */>
+                    ar
+                    ar-modes="scene-viewer quick-look">
                     <button slot="ar-button" class="ar-button">
                         View in AR
                     </button>
                 </model-viewer>
             </div>
 
-            <!-- Add more models here -->
+            <!-- Add more models here by copying one of the blocks above -->
         </div>
+
+        <!-- ====================================================== -->
+        <!-- =============== END OF MODEL GALLERY ================= -->
+        <!-- ====================================================== -->
+
     </div>
 
     <script>
+        // (Your JavaScript here... no changes needed)
         const galleryGrid = document.querySelector('.gallery-grid');
         const modelCards = document.querySelectorAll('.model-card');
         const overlay = document.getElementById('gallery-overlay');
@@ -218,7 +212,6 @@
             const closeBtn = card.querySelector('.close-btn');
 
             card.addEventListener('click', (event) => {
-                // Do nothing if clicking on the AR button itself
                 if (event.target.slot === 'ar-button') {
                     return;
                 }
@@ -237,9 +230,8 @@
                 startInactivityTimer();
             });
             
-            // 1. ADD CLICK EVENT TO THE CLOSE BUTTON
             closeBtn.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevents the card's click event from firing
+                event.stopPropagation();
                 shrinkCard(card);
             });
 
