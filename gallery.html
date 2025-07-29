@@ -21,7 +21,7 @@
             text-align: center;
         }
 
-        /* Step 1: Create the Grid Layout */
+        /* Grid Layout */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -29,15 +29,14 @@
             padding: 20px;
         }
 
-        /* Step 2: Style the individual model cards */
+        /* Individual model cards */
         .model-card {
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             cursor: pointer;
-            position: relative; /* Needed for positioning context */
-            overflow: hidden; /* Hides parts of the model that stick out */
-            /* Step 3: Add smooth transitions */
+            position: relative;
+            overflow: hidden;
             transition: transform 0.5s ease-in-out, z-index 0.5s ease-in-out, opacity 0.5s ease-in-out;
         }
         
@@ -50,27 +49,26 @@
 
         model-viewer {
             width: 100%;
-            height: 250px; /* Smaller height for grid view */
+            height: 250px;
         }
         
-        /* Step 4: Define the "expanded" state */
+        /* Expanded state for the card */
         .model-card.expanded {
             position: fixed;
             top: 50%;
             left: 50%;
-            width: 90vw; /* 90% of the viewport width */
-            height: 90vh; /* 90% of the viewport height */
-            transform: translate(-50%, -50%) scale(1); /* Center and scale up */
-            z-index: 1000; /* Ensure it's on top of everything */
+            width: 90vw;
+            height: 90vh;
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 1000;
             cursor: default;
         }
 
-        /* Make the model-viewer inside the expanded card fill the space */
         .model-card.expanded model-viewer {
             height: 90%;
         }
 
-        /* An overlay for the background when a model is expanded */
+        /* Background overlay */
         #gallery-overlay {
             position: fixed;
             top: 0;
@@ -78,14 +76,52 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.7);
-            z-index: 999; /* Just below the expanded card */
+            z-index: 999;
             opacity: 0;
-            pointer-events: none; /* Can't be clicked */
+            pointer-events: none;
             transition: opacity 0.5s ease-in-out;
         }
-
         #gallery-overlay.active {
             opacity: 1;
+            pointer-events: auto; /* Allow clicks on the overlay to close */
+        }
+
+        /* 1. STYLING FOR THE CLOSE BUTTON */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 35px;
+            font-weight: bold;
+            color: #333;
+            background: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            line-height: 38px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1001; /* Above the model viewer */
+            display: none; /* Hidden by default */
+        }
+        
+        .model-card.expanded .close-btn {
+            display: block; /* Show only when card is expanded */
+        }
+        
+        /* 2. STYLING FOR THE AR BUTTON */
+        .ar-button {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin: 10px;
+            cursor: pointer;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
         }
     </style>
 </head>
@@ -93,77 +129,102 @@
     <div id="gallery-overlay"></div>
     <div class="container">
         <h1>3D Model Gallery</h1>
-        <p class="instructions">Click on a model to view it in detail.</p>
+        <p class="instructions">Click on a model to view it in detail. Use the AR button on a mobile device to see it in your world.</p>
         
         <div class="gallery-grid">
             <!-- Model 1 -->
             <div class="model-card">
+                <button class="close-btn">×</button>
                 <h2>Forest Cabin</h2>
                 <model-viewer
-                    src="Cabin_1.glb" camera-controls auto-rotate environment-image="neutral" alt="Forest Cabin 3D model">
+                    src="Cabin_1.glb"
+                    camera-controls
+                    auto-rotate
+                    environment-image="neutral"
+                    alt="Forest Cabin 3D model"
+                    ar /* Enable AR */
+                    ar-modes="scene-viewer quick-look" /* Define AR modes */>
+                    <button slot="ar-button" class="ar-button">
+                        View in AR
+                    </button>
                 </model-viewer>
             </div>
 
             <!-- Model 2 -->
             <div class="model-card">
+                <button class="close-btn">×</button>
                 <h2>Mountain Cabin</h2>
                 <model-viewer
-                    src="Cabin_2.glb" camera-controls auto-rotate environment-image="neutral" alt="Mountain Cabin 3D model">
+                    src="Cabin_2.glb"
+                    camera-controls
+                    auto-rotate
+                    environment-image="neutral"
+                    alt="Mountain Cabin 3D model"
+                    ar /* Enable AR */
+                    ar-modes="scene-viewer quick-look" /* Define AR modes */>
+                    <button slot="ar-button" class="ar-button">
+                        View in AR
+                    </button>
                 </model-viewer>
             </div>
 
-            <!-- Add more models here by copying the model-card div -->
+            <!-- Add more models here -->
         </div>
     </div>
 
     <script>
-        // Step 5: The JavaScript Logic
         const galleryGrid = document.querySelector('.gallery-grid');
         const modelCards = document.querySelectorAll('.model-card');
         const overlay = document.getElementById('gallery-overlay');
         let activeCard = null;
         let inactivityTimer;
 
-        // Function to shrink any active card
         const shrinkCard = (card) => {
             if (card) {
                 card.classList.remove('expanded');
                 activeCard = null;
                 overlay.classList.remove('active');
-                clearTimeout(inactivityTimer); // Stop any running timer
+                clearTimeout(inactivityTimer); 
             }
         };
 
-        // Function to start the inactivity timer
         const startInactivityTimer = () => {
-            clearTimeout(inactivityTimer); // Clear previous timer
+            clearTimeout(inactivityTimer);
             inactivityTimer = setTimeout(() => {
                 shrinkCard(activeCard);
-            }, 5000); // 5 seconds
+            }, 5000);
         };
 
         modelCards.forEach(card => {
             const modelViewer = card.querySelector('model-viewer');
+            const closeBtn = card.querySelector('.close-btn');
 
             card.addEventListener('click', (event) => {
-                // Don't do anything if the card is already expanded
+                // Do nothing if clicking on the AR button itself
+                if (event.target.slot === 'ar-button') {
+                    return;
+                }
+                
                 if (card.classList.contains('expanded')) {
                     return;
                 }
 
-                // If another card is active, shrink it first
                 if (activeCard && activeCard !== card) {
                     shrinkCard(activeCard);
                 }
 
-                // Expand the clicked card
                 card.classList.add('expanded');
                 activeCard = card;
                 overlay.classList.add('active');
-                startInactivityTimer(); // Start the 5-second timer
+                startInactivityTimer();
+            });
+            
+            // 1. ADD CLICK EVENT TO THE CLOSE BUTTON
+            closeBtn.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevents the card's click event from firing
+                shrinkCard(card);
             });
 
-            // Reset the timer whenever the user interacts with the camera
             modelViewer.addEventListener('camera-change', () => {
                 if (card.classList.contains('expanded')) {
                     startInactivityTimer();
@@ -171,7 +232,6 @@
             });
         });
 
-        // Add event listener to the overlay to shrink the card when clicking outside
         overlay.addEventListener('click', () => {
             shrinkCard(activeCard);
         });
