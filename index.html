@@ -3,80 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Cabin in AR</title>
-    <!-- Load Google Model Viewer -->
+    <title>3D Model Gallery</title>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
+        /* (Your CSS here... no changes needed) */
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
             margin: 0;
             padding: 20px;
-            background: #f5f5f5;
+            background: #fbf3da;
         }
-        h1 {
-            color: #333;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, .instructions {
+            text-align: center;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .model-card {
+            background: white;
+            border-radius: 64px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s ease-in-out, z-index 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+        .model-card h2 {
+            text-align: center;
+            padding: 15px 0 0;
+            margin: 0;
+            font-size: 1.2em;
         }
         model-viewer {
             width: 100%;
-            height: 500px;
-            margin: 20px auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            height: 250px;
         }
-        .instructions {
-            background: #e9f7fe;
-            padding: 15px;
-            border-radius: 8px;
-            max-width: 600px;
-            margin: 0 auto 20px;
+        .model-card.expanded {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 90vw;
+            height: 90vh;
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 1000;
+            cursor: default;
+        }
+        .model-card.expanded model-viewer {
+            height: 90%;
+        }
+        #gallery-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #gallery-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 35px;
+            font-weight: bold;
+            color: #333;
+            background: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            line-height: 38px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1001;
+            display: none;
+        }
+        .model-card.expanded .close-btn {
+            display: block;
+        }
+        .ar-button {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin: 10px;
+            cursor: pointer;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
         }
     </style>
 </head>
 <body>
+    <div id="gallery-overlay"></div>
     <div class="container">
-        <h1>Lowpoly Cabin AR Experience</h1>
+        <h1>3D Model Gallery</h1>
+        <p class="instructions">Click on a model to view it in detail. Use the AR button on a mobile device to see it in your world.</p>
         
-        <div class="instructions">
-            <p>To view in AR:</p>
-            <ol>
-                <li>Open this page on your iPhone or Android device</li>
-                <li>Look for the AR button (🌐) in the model viewer</li>
-                <li>Tap it and point your camera at a flat surface</li>
-            </ol>
+        <!-- ====================================================== -->
+        <!-- ============== START OF MODEL GALLERY ================ -->
+        <!-- ====================================================== -->
+        
+        <div class="gallery-grid">
+            <!-- Model 1 -->
+            <div class="model-card">
+                <button class="close-btn">×</button>
+                <h2>Forest Cabin</h2>
+                <model-viewer
+                    src="Cabin_1.glb"
+                    camera-controls
+                    auto-rotate
+                    environment-image="neutral"
+                    alt="Forest Cabin 3D model"
+                    ar
+                    ar-modes="scene-viewer quick-look">
+                    <button slot="ar-button" class="ar-button">
+                        View in AR
+                    </button>
+                </model-viewer>
+            </div>
+
+            <!-- Model 2 -->
+            <div class="model-card">
+                <button class="close-btn">×</button>
+                <h2>Mountain Cabin</h2>
+                <model-viewer
+                    src="Cabin_2.glb"
+                    camera-controls
+                    auto-rotate
+                    environment-image="neutral"
+                    alt="Mountain Cabin 3D model"
+                    ar
+                    ar-modes="scene-viewer quick-look">
+                    <button slot="ar-button" class="ar-button">
+                        View in AR
+                    </button>
+                </model-viewer>
+            </div>
+
+            <!-- Model 3 -->
+            <div class="model-card">
+                <button class="close-btn">×</button>
+                <h2>Mountain Cabin 2</h2>
+                <model-viewer
+                    src="Cabin_2.glb"
+                    camera-controls
+                    auto-rotate
+                    environment-image="neutral"
+                    alt="Mountain Cabin 3D model"
+                    ar
+                    ar-modes="scene-viewer quick-look">
+                    <button slot="ar-button" class="ar-button">
+                        View in AR
+                    </button>
+                </model-viewer>
+            </div>
+
+            <!-- Add more models here by copying one of the blocks above -->
         </div>
 
-        <!-- Updated to load Cabin_1.glb -->
-        <model-viewer
-            src="Cabin_1.glb"
-            ar
-            ar-modes="scene-viewer quick-look"
-            camera-controls
-            auto-rotate
-            environment-image="neutral"
-            alt="A 3D model of a lowpoly cabin">
-            
-            <button slot="ar-button" style="background: #1a73e8; color: white; border: none; padding: 10px 20px; border-radius: 20px; margin: 10px;">
-                View in AR
-            </button>
-            
-        </model-viewer>
+        <!-- ====================================================== -->
+        <!-- =============== END OF MODEL GALLERY ================= -->
+        <!-- ====================================================== -->
 
-        <p><small>Note: Requires Safari on iOS or Chrome on Android with AR support.</small></p>
     </div>
+
+    <script>
+        // (Your JavaScript here... no changes needed)
+        const galleryGrid = document.querySelector('.gallery-grid');
+        const modelCards = document.querySelectorAll('.model-card');
+        const overlay = document.getElementById('gallery-overlay');
+        let activeCard = null;
+        let inactivityTimer;
+
+        const shrinkCard = (card) => {
+            if (card) {
+                card.classList.remove('expanded');
+                activeCard = null;
+                overlay.classList.remove('active');
+                clearTimeout(inactivityTimer); 
+            }
+        };
+
+        const startInactivityTimer = () => {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                shrinkCard(activeCard);
+            }, 5000);
+        };
+
+        modelCards.forEach(card => {
+            const modelViewer = card.querySelector('model-viewer');
+            const closeBtn = card.querySelector('.close-btn');
+
+            card.addEventListener('click', (event) => {
+                if (event.target.slot === 'ar-button') {
+                    return;
+                }
+                
+                if (card.classList.contains('expanded')) {
+                    return;
+                }
+
+                if (activeCard && activeCard !== card) {
+                    shrinkCard(activeCard);
+                }
+
+                card.classList.add('expanded');
+                activeCard = card;
+                overlay.classList.add('active');
+                startInactivityTimer();
+            });
+            
+            closeBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                shrinkCard(card);
+            });
+
+            modelViewer.addEventListener('camera-change', () => {
+                if (card.classList.contains('expanded')) {
+                    startInactivityTimer();
+                }
+            });
+        });
+
+        overlay.addEventListener('click', () => {
+            shrinkCard(activeCard);
+        });
+    </script>
 </body>
 </html>
-<a href="gallery.html" style="
-    display: block;
-    text-align: center;
-    background: #1a73e8;
-    color: white;
-    padding: 15px;
-    border-radius: 8px;
-    margin: 20px auto;
-    max-width: 200px;
-    text-decoration: none;
-">
-    View Full Gallery
-</a>
