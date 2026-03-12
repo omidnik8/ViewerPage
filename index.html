@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Gallery</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+        /* (Your CSS here... no changes needed) */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #fbf3da;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, .instructions {
+            text-align: center;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .model-card {
+            background: white;
+            border-radius: 64px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s ease-in-out, z-index 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+        .model-card h2 {
+            text-align: center;
+            padding: 15px 0 0;
+            margin: 0;
+            font-size: 1.2em;
+        }
+        model-viewer {
+            width: 100%;
+            height: 250px;
+        }
+        .model-card.expanded {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 90vw;
+            height: 90vh;
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 1000;
+            cursor: default;
+        }
+        .model-card.expanded model-viewer {
+            height: 90%;
+        }
+        #gallery-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #gallery-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 35px;
+            font-weight: bold;
+            color: #333;
+            background: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            line-height: 38px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1001;
+            display: none;
+        }
+        .model-card.expanded .close-btn {
+            display: block;
+        }
+        .ar-button {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin: 10px;
+            cursor: pointer;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="gallery-overlay"></div>
+    <div class="container">
+        <h1>3D Model Gallery</h1>
+        <p class="instructions">Click on a model to view it in detail. Use the AR button on a mobile device to see it in your world.</p>
+        
+        <!-- ====================================================== -->
+        <!-- ============== START OF MODEL GALLERY ================ -->
+        <!-- ====================================================== -->
+        
+        <div class="gallery-grid">
+            <!-- Model 1 -->
+            <div class="model-card">
+                <button class="close-btn">×</button>
+                <h2>Cabin</h2>
+                <model-viewer
+                    src="Cabin1.glb"
+                    camera-controls
+                    auto-rotate
+                    environment-image="neutral"
+                    alt="Forest Cabin 3D model"
+                    ar
+                    ar-modes="scene-viewer quick-look">
+                    <button slot="ar-button" class="ar-button">
+                        View in AR
+                    </button>
+                </model-viewer>
+            </div>
+
+            <!-- Model 2 -->
+            <div class="model-card">
+                <button class="close-btn">×</button>
+                <h2>Donuts</h2>
+                <model-viewer
+                    src="donuto.glb"
+                    camera-controls
+                    auto-rotate
+                    environment-image="neutral"
+                    alt="Mountain Cabin 3D model"
+                    ar
+                    ar-modes="scene-viewer quick-look">
+                    <button slot="ar-button" class="ar-button">
+                        View in AR
+                    </button>
+                </model-viewer>
+            </div>
+
+            <!-- Model 3 -->
+            <div class="model-card">
+                <button class="close-btn">×</button>
+                <h2>Merc</h2>
+                <model-viewer
+                    src="MercF.glb"
+                    camera-controls
+                    auto-rotate
+                    environment-image="neutral"
+                    alt="Mountain Cabin 3D model"
+                    ar
+                    ar-modes="scene-viewer quick-look">
+                    <button slot="ar-button" class="ar-button">
+                        View in AR
+                    </button>
+                </model-viewer>
+            </div>
+
+             <!-- Model 4 -->
+             <div class="model-card">
+                <button class="close-btn">×</button>
+                <h2>Wind Turbine</h2>
+                <model-viewer
+                    src="windturbine.glb"
+                    camera-controls
+                    auto-rotate
+                    environment-image="neutral"
+                    alt="Mountain Cabin 3D model"
+                    ar
+                    ar-modes="scene-viewer quick-look">
+                    <button slot="ar-button" class="ar-button">
+                        View in AR
+                    </button>
+                </model-viewer>
+            </div>
+            <!-- Add more models here by copying one of the blocks above -->
+        </div>
+
+        <!-- ====================================================== -->
+        <!-- =============== END OF MODEL GALLERY ================= -->
+        <!-- ====================================================== -->
+
+    </div>
+
+    <script>
+        // (Your JavaScript here... no changes needed)
+        const galleryGrid = document.querySelector('.gallery-grid');
+        const modelCards = document.querySelectorAll('.model-card');
+        const overlay = document.getElementById('gallery-overlay');
+        let activeCard = null;
+        let inactivityTimer;
+
+        const shrinkCard = (card) => {
+            if (card) {
+                card.classList.remove('expanded');
+                activeCard = null;
+                overlay.classList.remove('active');
+                clearTimeout(inactivityTimer); 
+            }
+        };
+
+        const startInactivityTimer = () => {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                shrinkCard(activeCard);
+            }, 5000);
+        };
+
+        modelCards.forEach(card => {
+            const modelViewer = card.querySelector('model-viewer');
+            const closeBtn = card.querySelector('.close-btn');
+
+            card.addEventListener('click', (event) => {
+                if (event.target.slot === 'ar-button') {
+                    return;
+                }
+                
+                if (card.classList.contains('expanded')) {
+                    return;
+                }
+
+                if (activeCard && activeCard !== card) {
+                    shrinkCard(activeCard);
+                }
+
+                card.classList.add('expanded');
+                activeCard = card;
+                overlay.classList.add('active');
+                startInactivityTimer();
+            });
+            
+            closeBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                shrinkCard(card);
+            });
+
+            modelViewer.addEventListener('camera-change', () => {
+                if (card.classList.contains('expanded')) {
+                    startInactivityTimer();
+                }
+            });
+        });
+
+        overlay.addEventListener('click', () => {
+            shrinkCard(activeCard);
+        });
+    </script>
+</body>
+</html>

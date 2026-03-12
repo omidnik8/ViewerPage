@@ -1,0 +1,297 @@
+:root {
+    --pc-bg: #0f172a;
+    --pc-bg-alt: #020617;
+    --pc-panel-bg: #020617;
+    --pc-accent: #38bdf8;
+    --pc-accent-soft: rgba(56, 189, 248, 0.15);
+    --pc-text: #e5e7eb;
+    --pc-muted: #9ca3af;
+    --pc-border: #1f2937;
+    --pc-radius-lg: 18px;
+    --pc-radius-md: 12px;
+    --pc-radius-sm: 8px;
+    --pc-shadow-soft: 0 22px 45px rgba(15, 23, 42, 0.75);
+    --pc-font: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--pc-font);
+    background: radial-gradient(circle at top left, #1e293b, #020617 55%);
+    color: var(--pc-text);
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    padding: 20px;
+}
+
+#app {
+    width: 100%;
+    max-width: 1400px;
+    background: linear-gradient(145deg, #020617, #020617 40%, #0b1120);
+    border-radius: 24px;
+    box-shadow: var(--pc-shadow-soft);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.pc-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: radial-gradient(circle at top left, #0b1120, #020617);
+}
+
+.pc-header h1 {
+    margin: 0;
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #e5e7eb;
+}
+
+.pc-layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1.4fr) minmax(0, 1.4fr);
+    gap: 16px;
+    padding: 16px 16px 18px;
+}
+
+.pc-panel {
+    background: radial-gradient(circle at top, #020617, #020617 55%, #020617);
+    border-radius: var(--pc-radius-lg);
+    border: 1px solid rgba(31, 41, 55, 0.85);
+    padding: 14px 14px 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 360px;
+    position: relative;
+    overflow: hidden;
+}
+
+.pc-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+        circle at top,
+        rgba(56, 189, 248, 0.09),
+        transparent 60%
+    );
+    opacity: 0.7;
+}
+
+.pc-panel h2 {
+    margin: 0 0 10px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--pc-muted);
+}
+
+.pc-tools-panel {
+    max-height: 520px;
+}
+
+.pc-tools-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.pc-tool-button {
+    border-radius: var(--pc-radius-md);
+    border: 1px solid rgba(30, 64, 175, 0.5);
+    background: radial-gradient(circle at top left, #0b1120, #020617);
+    color: var(--pc-text);
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 8px;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.1s ease,
+        box-shadow 0.15s ease;
+}
+
+.pc-tool-button::after {
+    content: "▶";
+    font-size: 0.7rem;
+    color: var(--pc-accent);
+}
+
+.pc-tool-button:hover {
+    background: radial-gradient(circle at top left, #0f172a, #020617);
+    border-color: rgba(56, 189, 248, 0.7);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+    transform: translateY(-1px);
+}
+
+.pc-tool-button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.pc-tree,
+.pc-details-content {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    border-radius: var(--pc-radius-md);
+    background: radial-gradient(circle at top, #020617, #020617 60%, #020617);
+    border: 1px solid rgba(31, 41, 55, 0.9);
+    padding: 10px;
+    overflow: auto;
+}
+
+.pc-empty-note {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--pc-muted);
+    padding: 8px;
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: var(--pc-radius-sm);
+    border: 1px dashed rgba(75, 85, 99, 0.8);
+}
+
+/* Simple tree styles (placeholder) */
+.pc-tree-item {
+    font-size: 0.82rem;
+    padding: 4px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--pc-text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pc-tree-item:hover {
+    background: rgba(15, 23, 42, 0.9);
+}
+
+.pc-tree-item.is-selected {
+    background: var(--pc-accent-soft);
+    border: 1px solid rgba(56, 189, 248, 0.6);
+}
+
+.pc-tree-item-icon {
+    width: 16px;
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.pc-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.pc-pill {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.6);
+    color: var(--pc-muted);
+}
+
+.pc-details-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.pc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.pc-field label {
+    font-size: 0.75rem;
+    color: var(--pc-muted);
+}
+
+.pc-field input,
+.pc-field textarea,
+.pc-field select {
+    background: #020617;
+    border-radius: 8px;
+    border: 1px solid rgba(55, 65, 81, 0.9);
+    padding: 6px 8px;
+    color: var(--pc-text);
+    font-size: 0.8rem;
+    outline: none;
+}
+
+.pc-field input:focus,
+.pc-field textarea:focus,
+.pc-field select:focus {
+    border-color: rgba(56, 189, 248, 0.75);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.3);
+}
+
+.pc-actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.pc-button-primary {
+    border-radius: 999px;
+    border: none;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    background: linear-gradient(135deg, #0ea5e9, #22c55e);
+    color: #0b1120;
+    cursor: pointer;
+}
+
+.pc-button-primary:hover {
+    filter: brightness(1.05);
+}
+
+.pc-button-ghost {
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.6);
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    background: transparent;
+    color: var(--pc-muted);
+    cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+    .pc-layout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto auto auto;
+    }
+
+    .pc-panel {
+        min-height: 260px;
+    }
+}
+

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Control</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div id="app">
+        <header class="pc-header">
+            <h1>Project Control</h1>
+        </header>
+
+        <main class="pc-layout">
+            <!-- Tools Panel -->
+            <section class="pc-panel pc-tools-panel">
+                <h2>Tools</h2>
+                <div class="pc-tools-list">
+                    <button class="pc-tool-button" data-tool="folders-generator">
+                        FoldersGenerator
+                    </button>
+                    <button class="pc-tool-button" data-tool="asset-creator">
+                        AssetCreator
+                    </button>
+                    <button class="pc-tool-button" data-tool="category-generator">
+                        CategoryGenerator
+                    </button>
+                </div>
+            </section>
+
+            <!-- Browse Panel -->
+            <section class="pc-panel pc-browse-panel">
+                <h2>Browse</h2>
+                <div id="browse-root" class="pc-tree">
+                    <!-- We will render folders/files here -->
+                    <p class="pc-empty-note">
+                        No project data loaded yet. Choose a tool on the left to scan.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Details Panel -->
+            <section class="pc-panel pc-details-panel">
+                <h2>Details</h2>
+                <div id="details-content" class="pc-details-content">
+                    <p class="pc-empty-note">
+                        Select a file, folder, or setting from the Browse panel to see details here.
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
+
